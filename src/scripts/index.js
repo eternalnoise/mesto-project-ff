@@ -1,8 +1,12 @@
+import '../pages/index.css';
+import {initialCards} from './cards.js';
+
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector('#card-template').content.querySelector('.card');
 
 // @todo: DOM узлы
 const cards = document.querySelector('.places__list');
+const popupEdit = document.querySelector('.popup_type_edit');
 
 // @todo: Функция создания карточки
 const createCard = function(cardItem, removeCallback) {
@@ -29,3 +33,4 @@ initialCards.forEach((cardItem) => {
   const card = createCard(cardItem, removeCard);
   cards.append(card);
 });
+
