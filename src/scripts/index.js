@@ -47,13 +47,13 @@ function openFullScreenImage (cardItem) {
 } 
 
 // функция для заполнения формы редактирования профиля
-function handleFormSubmit(evt) {
+function handleFormEditProfileSubmit(evt) {
   evt.preventDefault(); 
   profileDescription.textContent = jobInput.value;
   profileName.textContent = nameInput.value;
   closePopup(popupEditProfile);
 }
-formElementEditProfile.addEventListener('submit', handleFormSubmit); 
+formElementEditProfile.addEventListener('submit', handleFormEditProfileSubmit); 
 
 // Вывести карточки на страницу
 initialCards.forEach((cardItem) => {
@@ -70,5 +70,7 @@ function handleCardSubmit(evt) {
   }
   cards.prepend(createCard(addCardItem, removeCard, likeCard, openFullScreenImage));
   closePopup(popupAddCard);
+  formElementAddCard.reset();
 }
 formElementAddCard.addEventListener('submit', handleCardSubmit); 
+
