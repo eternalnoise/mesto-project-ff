@@ -28,6 +28,7 @@ const newCardLinkInput = document.querySelector('.popup__input_type_url');
 
 // open modal 
 function openProfileEdit () {
+  clearValidation(formElementEditProfile);
   openPopup(popupEditProfile);
   jobInput.value = profileDescription.textContent;
   nameInput.value = profileName.textContent;
@@ -35,6 +36,7 @@ function openProfileEdit () {
 buttonProfileEdit.addEventListener('click', openProfileEdit);
 
 function openAddCard () {
+  clearValidation(formElementAddCard);
   openPopup(popupAddCard);
 }
 buttonAddCard.addEventListener('click', openAddCard);
@@ -53,7 +55,6 @@ function handleFormEditProfileSubmit(evt) {
   profileDescription.textContent = jobInput.value;
   profileName.textContent = nameInput.value;
   closePopup(popupEditProfile);
-  clearValidation(formElementEditProfile);
 }
 formElementEditProfile.addEventListener('submit', handleFormEditProfileSubmit); 
 
@@ -78,9 +79,9 @@ formElementAddCard.addEventListener('submit', handleCardSubmit);
 
 enableValidation(validationConfig);
 
-const forms = document.querySelectorAll(validationConfig.formSelector);
+/*const forms = document.querySelectorAll(validationConfig.formSelector);
 forms.forEach(formElement => {
   clearValidation(formElement);
-});
+});*/
 
  
