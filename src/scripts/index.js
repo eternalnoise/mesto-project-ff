@@ -2,6 +2,7 @@ import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { createCard, removeCard, likeCard } from './card.js';
 import { openPopup, closePopup } from './modal.js';
+import { enableValidation, validationConfig, clearValidation } from './validation.js';
  
 // DOM узлы
 const cards = document.querySelector('.places__list');
@@ -52,6 +53,7 @@ function handleFormEditProfileSubmit(evt) {
   profileDescription.textContent = jobInput.value;
   profileName.textContent = nameInput.value;
   closePopup(popupEditProfile);
+  clearValidation(formElementEditProfile);
 }
 formElementEditProfile.addEventListener('submit', handleFormEditProfileSubmit); 
 
@@ -74,3 +76,11 @@ function handleCardSubmit(evt) {
 }
 formElementAddCard.addEventListener('submit', handleCardSubmit); 
 
+enableValidation(validationConfig);
+
+const forms = document.querySelectorAll(validationConfig.formSelector);
+forms.forEach(formElement => {
+  clearValidation(formElement);
+});
+
+ 
