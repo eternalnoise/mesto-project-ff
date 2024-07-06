@@ -1,7 +1,7 @@
   const config = {
     baseUrl: 'https://nomoreparties.co/v1/wff-cohort-17',
     headers: {
-      authorization: 'e5c9680b-1e7a-4e77-a4d4-e0e2f38db8d0',
+       authorization: 'e5c9680b-1e7a-4e77-a4d4-e0e2f38db8d0',
       'Content-Type': 'application/json'
     }
   }
@@ -41,13 +41,13 @@
   }
 
   //добавить карточку
-  function addCard(nameCard, linkCard) {
+  function sendCard(card) {
     return fetch(`${config.baseUrl}/cards`, {
       method: 'POST',
       headers: config.headers,
       body: JSON.stringify({
-        name: nameCard,
-        link: linkCard,
+        name: card.name,
+        link: card.link,
       })
     }).then(checkResponse);
   }
@@ -87,4 +87,4 @@
     }).then(checkResponse);
   }
 
-  export { getCards, getUserInfo, editProfile, addCard, removeMyCard, sendLike, removeLike, editAvatar };
+  export { getCards, getUserInfo, editProfile, sendCard, removeMyCard, sendLike, removeLike, editAvatar };

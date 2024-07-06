@@ -2,7 +2,7 @@
 const cardTemplate = document.querySelector('#card-template').content.querySelector('.card');
 
 // Функция создания карточки
-export const createCard = function(cardItem, removeCallback, likeCallback, openFullScreenImage) {
+export const createCard = function(cardItem, removeCallback, likeCallback, openFullScreenImage, cardId) {
   const cardElement = cardTemplate.cloneNode(true);
   const cardTitle = cardElement.querySelector('.card__title');
   const cardImage = cardElement.querySelector('.card__image');

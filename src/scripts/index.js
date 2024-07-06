@@ -1,8 +1,8 @@
 import '../pages/index.css';
-import { initialCards } from './cards.js';
 import { createCard, removeCard, likeCard } from './card.js';
 import { openPopup, closePopup } from './modal.js';
 import { enableValidation, validationConfig, clearValidation } from './validation.js';
+import { getCards, getUserInfo, editProfile, sendCard, removeMyCard, sendLike, removeLike, editAvatar } from './api.js';
  
 // DOM узлы
 const cards = document.querySelector('.places__list');
@@ -20,14 +20,14 @@ const profileName = document.querySelector('.profile__title');
 const jobInput = document.querySelector('.popup__input_type_description');
 const profileDescription = document.querySelector('.profile__description');
 const formElementEditProfile = document.forms['edit-profile'];
+const profileImage = document.querySelector('.profile__image');
 
 const formElementAddCard = document.forms['new-place'];
 const newCardNameInput = document.querySelector('.popup__input_type_card-name');
 const newCardLinkInput = document.querySelector('.popup__input_type_url');
 
-
 // open modal 
-function openProfileEdit () {
+function openProfileEdit() {
   clearValidation(formElementEditProfile);
   openPopup(popupEditProfile);
   jobInput.value = profileDescription.textContent;
@@ -35,13 +35,13 @@ function openProfileEdit () {
 }
 buttonProfileEdit.addEventListener('click', openProfileEdit);
 
-function openAddCard () {
+function openAddCard() {
   clearValidation(formElementAddCard);
   openPopup(popupAddCard);
 }
 buttonAddCard.addEventListener('click', openAddCard);
 
-function openFullScreenImage (cardItem) {
+function openFullScreenImage(cardItem) {
   popupImageContent.src = cardItem.link;
   popupImageContent.alt = cardItem.link;
   popupImageCaption.textContent = cardItem.name;
@@ -52,17 +52,17 @@ function openFullScreenImage (cardItem) {
 // функция для заполнения формы редактирования профиля
 function handleFormEditProfileSubmit(evt) {
   evt.preventDefault(); 
-  profileDescription.textContent = jobInput.value;
-  profileName.textContent = nameInput.value;
-  closePopup(popupEditProfile);
+  editProfile(nameInput.value, jobInput.value)
+  .then(() => {
+    profileDescription.textContent = jobInput.value;
+    profileName.textContent = nameInput.value;
+    closePopup(popupEditProfile);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 }
 formElementEditProfile.addEventListener('submit', handleFormEditProfileSubmit); 
-
-// Вывести карточки на страницу
-initialCards.forEach((cardItem) => {
-  const card = createCard(cardItem, removeCard, likeCard, openFullScreenImage);
-  cards.append(card);
-});
 
 // функция-обработчик карточек
 function handleCardSubmit(evt) {
@@ -71,17 +71,33 @@ function handleCardSubmit(evt) {
     name: newCardNameInput.value,
     link: newCardLinkInput.value
   }
-  cards.prepend(createCard(addCardItem, removeCard, likeCard, openFullScreenImage));
-  closePopup(popupAddCard);
-  formElementAddCard.reset();
+  sendCard(addCardItem)
+  .then(() => {
+    cards.prepend(createCard(addCardItem, removeCard, likeCard, openFullScreenImage));
+    closePopup(popupAddCard);
+    formElementAddCard.reset();
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 }
 formElementAddCard.addEventListener('submit', handleCardSubmit); 
 
 enableValidation(validationConfig);
 
-/*const forms = document.querySelectorAll(validationConfig.formSelector);
-forms.forEach(formElement => {
-  clearValidation(formElement);
-});*/
 
- 
+
+//загрузка карточек и инфо
+Promise.all([getUserInfo(), getCards()])
+  .then(([userData, cardsData]) => {
+   cardsData.forEach((cardItem) => {
+    const card = createCard(cardItem, removeCard, likeCard, openFullScreenImage);
+  cards.append(card);
+    });
+  profileName.textContent = userData.name;
+  profileDescription.textContent = userData.about;
+  profileImage.style.background = `url(${userData.avatar})`;
+  })
+  .catch((err) => {
+    console.log(err)
+  });
