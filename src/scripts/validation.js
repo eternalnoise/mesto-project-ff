@@ -6,14 +6,6 @@ const validationConfig = {
   inputErrorClass: 'form__input_type_error',
   errorClass: 'form__input-error_active'
 }; 
-/*
-const editprofile = document.forms['edit-profile'];
-const nameinput = editprofile.elements.name;
-const descriptioninput = editprofile.elements.description;
-
-const newplace = document.forms['new-place'];
-const placenameinput = newplace.elements['place-name'];
-const linkinput = newplace.elements.link;*/
 
 //присвоить класс с ошибкой
 function showInputError(formElement, inputElement, errorMessage) {

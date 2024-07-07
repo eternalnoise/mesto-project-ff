@@ -24,7 +24,11 @@ const profileImage = document.querySelector('.profile__image');
 
 const formElementAddCard = document.forms['new-place'];
 const newCardNameInput = document.querySelector('.popup__input_type_card-name');
-const newCardLinkInput = document.querySelector('.popup__input_type_url');
+const newCardLinkInput = document.querySelector('#link-input');
+
+const popupEditAvatar = document.querySelector('.popup_type_edit-profile');
+const formElementEditAvatar = document.forms['edit-profile-avatar'];
+const newAvatarLinkInput = document.querySelector('#link-input-avatar');
 
 // open modal 
 function openProfileEdit() {
@@ -49,9 +53,33 @@ function openFullScreenImage(cardItem) {
   openPopup(popupImage);
 } 
 
+//редактирование аватара
+function openEditAvatar() {
+  clearValidation(formElementEditAvatar);
+  openPopup(popupEditAvatar);
+}
+
+profileImage.addEventListener('click', openEditAvatar);
+
+function handleFormEditAvatarSubmit(evt) {
+  evt.preventDefault(); 
+  toggleButtonText(formElementEditAvatar);
+  editAvatar(newAvatarLinkInput.value)
+  .then(() => {
+    profileImage.style.background = `url(${newAvatarLinkInput.value})`;
+    closePopup(popupEditAvatar);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+  toggleButtonText(formElementEditAvatar);
+}
+formElementEditAvatar.addEventListener('submit', handleFormEditAvatarSubmit); 
+
 // функция для заполнения формы редактирования профиля
 function handleFormEditProfileSubmit(evt) {
   evt.preventDefault(); 
+  toggleButtonText(formElementEditProfile);
   editProfile(nameInput.value, jobInput.value)
   .then(() => {
     profileDescription.textContent = jobInput.value;
@@ -61,31 +89,33 @@ function handleFormEditProfileSubmit(evt) {
   .catch((err) => {
     console.log(err);
   })
+  toggleButtonText(formElementEditProfile);
 }
 formElementEditProfile.addEventListener('submit', handleFormEditProfileSubmit); 
 
 // функция-обработчик карточек
 function handleCardSubmit(evt) {
   evt.preventDefault(); 
+  toggleButtonText(formElementAddCard);
   const addCardItem = {
     name: newCardNameInput.value,
     link: newCardLinkInput.value
   }
   sendCard(addCardItem)
-  .then(() => {
-    cards.prepend(createCard(addCardItem, removeCard, likeCard, openFullScreenImage));
+  .then((res) => {
+    cards.prepend(createCard(res, removeCard, likeCard, openFullScreenImage));
     closePopup(popupAddCard);
     formElementAddCard.reset();
   })
   .catch((err) => {
     console.log(err);
   })
+  toggleButtonText(formElementAddCard);
 }
+
 formElementAddCard.addEventListener('submit', handleCardSubmit); 
 
 enableValidation(validationConfig);
-
-
 
 //загрузка карточек и инфо
 Promise.all([getUserInfo(), getCards()])
@@ -103,3 +133,15 @@ Promise.all([getUserInfo(), getCards()])
   .catch((err) => {
     console.log(err)
   });
+
+//изменение текста кнопки submit
+function toggleButtonText(formElement) {
+  const submitButton = formElement.querySelector('.popup__button');
+  if (submitButton.textContent == 'Сохранить') {
+    submitButton.textContent = 'Сохранение...';
+    //console.log(submitButton.textContent);
+  } else {
+    submitButton.textContent = 'Сохранить';
+    //console.log(submitButton.textContent);
+  }
+}
