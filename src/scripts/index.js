@@ -66,7 +66,7 @@ function handleFormEditAvatarSubmit(evt) {
   toggleButtonText(formElementEditAvatar);
   editAvatar(newAvatarLinkInput.value)
   .then(() => {
-    profileImage.style.background = `url(${newAvatarLinkInput.value})`;
+    profileImage.style.backgroundImage = `url(${newAvatarLinkInput.value})`;
     closePopup(popupEditAvatar);
   })
   .catch((err) => {
@@ -128,7 +128,7 @@ Promise.all([getUserInfo(), getCards()])
   
   profileName.textContent = userData.name;
   profileDescription.textContent = userData.about;
-  profileImage.style.background = `url(${userData.avatar})`;
+  profileImage.style.backgroundImage = `url(${userData.avatar})`;
   })
   .catch((err) => {
     console.log(err)
