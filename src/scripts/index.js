@@ -90,10 +90,12 @@ enableValidation(validationConfig);
 //загрузка карточек и инфо
 Promise.all([getUserInfo(), getCards()])
   .then(([userData, cardsData]) => {
-   cardsData.forEach((cardItem) => {
-    const card = createCard(cardItem, removeCard, likeCard, openFullScreenImage);
-  cards.append(card);
-    });
+    const userId = userData._id;
+    cardsData.forEach((cardItem) => {
+    const card = createCard(cardItem, removeCard, likeCard, openFullScreenImage, userId);
+    cards.append(card);
+    }); 
+  
   profileName.textContent = userData.name;
   profileDescription.textContent = userData.about;
   profileImage.style.background = `url(${userData.avatar})`;

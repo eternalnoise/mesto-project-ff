@@ -15,6 +15,7 @@ const newplace = document.forms['new-place'];
 const placenameinput = newplace.elements['place-name'];
 const linkinput = newplace.elements.link;*/
 
+//присвоить класс с ошибкой
 function showInputError(formElement, inputElement, errorMessage) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`); 
   inputElement.classList.add(validationConfig.inputErrorClass);
@@ -22,6 +23,7 @@ function showInputError(formElement, inputElement, errorMessage) {
   errorElement.classList.add(validationConfig.errorClass);
 }
 
+//скрыть ошибку
 function hideInputError(formElement, inputElement) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(validationConfig.inputErrorClass);
@@ -29,6 +31,7 @@ function hideInputError(formElement, inputElement) {
   errorElement.textContent = '';
 }
 
+//проверка на валидность
 function isValid(formElement, inputElement) {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
@@ -83,6 +86,7 @@ function toggleButtonState(inputList, buttonElement) {
   }
 }; 
 
+//очистить форму валидации
 function clearValidation(formElement) {
   const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
   const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);

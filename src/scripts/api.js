@@ -54,7 +54,7 @@
 
   //удалить свою карточку
   function removeMyCard(cardId) {
-    return fetch(`${config.baseUrl}/${cardId}`, {
+    return fetch(`${config.baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: config.headers,
     }).then(checkResponse);
