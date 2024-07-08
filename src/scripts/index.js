@@ -1,8 +1,9 @@
 import '../pages/index.css';
 import { createCard, removeCard, likeCard } from './card.js';
 import { openPopup, closePopup } from './modal.js';
-import { enableValidation, validationConfig, clearValidation } from './validation.js';
-import { getCards, getUserInfo, editProfile, sendCard, removeMyCard, sendLike, removeLike, editAvatar } from './api.js';
+import { enableValidation, clearValidation } from './validation.js';
+import { getCards, getUserInfo, editProfile, sendCard, editAvatar } from './api.js';
+import { toggleButtonText } from './utils.js';
  
 // DOM узлы
 const cards = document.querySelector('.places__list');
@@ -30,9 +31,19 @@ const popupEditAvatar = document.querySelector('.popup_type_edit-profile');
 const formElementEditAvatar = document.forms['edit-profile-avatar'];
 const newAvatarLinkInput = document.querySelector('#link-input-avatar');
 
+//settings
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button-inactive',
+  inputErrorClass: 'form__input_type_error',
+  errorClass: 'form__input-error_active'
+}; 
+
 // open modal 
 function openProfileEdit() {
-  clearValidation(formElementEditProfile);
+  clearValidation(formElementEditProfile, validationConfig);
   openPopup(popupEditProfile);
   jobInput.value = profileDescription.textContent;
   nameInput.value = profileName.textContent;
@@ -40,7 +51,7 @@ function openProfileEdit() {
 buttonProfileEdit.addEventListener('click', openProfileEdit);
 
 function openAddCard() {
-  clearValidation(formElementAddCard);
+  clearValidation(formElementAddCard, validationConfig);
   openPopup(popupAddCard);
 }
 buttonAddCard.addEventListener('click', openAddCard);
@@ -55,7 +66,7 @@ function openFullScreenImage(cardItem) {
 
 //редактирование аватара
 function openEditAvatar() {
-  clearValidation(formElementEditAvatar);
+  clearValidation(formElementEditAvatar, validationConfig);
   openPopup(popupEditAvatar);
 }
 
@@ -71,9 +82,11 @@ function handleFormEditAvatarSubmit(evt) {
   })
   .catch((err) => {
     console.log(err);
-  })
-  toggleButtonText(formElementEditAvatar);
-}
+  }) 
+  .finally(() => {
+    toggleButtonText(formElementEditAvatar);
+  });
+ }
 formElementEditAvatar.addEventListener('submit', handleFormEditAvatarSubmit); 
 
 // функция для заполнения формы редактирования профиля
@@ -89,7 +102,9 @@ function handleFormEditProfileSubmit(evt) {
   .catch((err) => {
     console.log(err);
   })
-  toggleButtonText(formElementEditProfile);
+  .finally(() => {
+    toggleButtonText(formElementEditProfile);
+  });
 }
 formElementEditProfile.addEventListener('submit', handleFormEditProfileSubmit); 
 
@@ -110,8 +125,10 @@ function handleCardSubmit(evt) {
   .catch((err) => {
     console.log(err);
   })
-  toggleButtonText(formElementAddCard);
-}
+  .finally(() => {
+    toggleButtonText(formElementAddCard);
+  });
+ }
 
 formElementAddCard.addEventListener('submit', handleCardSubmit); 
 
@@ -134,14 +151,3 @@ Promise.all([getUserInfo(), getCards()])
     console.log(err)
   });
 
-//изменение текста кнопки submit
-function toggleButtonText(formElement) {
-  const submitButton = formElement.querySelector('.popup__button');
-  if (submitButton.textContent == 'Сохранить') {
-    submitButton.textContent = 'Сохранение...';
-    //console.log(submitButton.textContent);
-  } else {
-    submitButton.textContent = 'Сохранить';
-    //console.log(submitButton.textContent);
-  }
-}

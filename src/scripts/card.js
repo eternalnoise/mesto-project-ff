@@ -4,13 +4,17 @@ import { removeLike, removeMyCard, sendLike } from "./api";
 const cardTemplate = document.querySelector('#card-template').content.querySelector('.card');
 
 // Функция создания карточки
+  
+function getCardTemplate() {
+  return cardTemplate.cloneNode(true);
+  };
+
 export const createCard = function(cardItem, removeCallback, likeCallback, openFullScreenImage, userId) {
-  // console.log(cardItem);
-  const cardElement = cardTemplate.cloneNode(true);
+  const cardElement = getCardTemplate();
   const cardTitle = cardElement.querySelector('.card__title');
   const cardImage = cardElement.querySelector('.card__image');
   const likeCountElement = cardElement.querySelector('.card__like-button_amount');
-  
+    
   if (cardItem.likes === undefined) {
     cardItem.likes = [];
   }
